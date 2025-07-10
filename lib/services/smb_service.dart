@@ -60,29 +60,9 @@ class SmbService {
       await connect.close();
       return forms;
     } catch (e) {
-      // print('Błąd podczas pobierania plików: $e');
       rethrow;
     }
   }
-
-  // Future<void> saveFileToDirectory(String fileName, String content) async {
-  //   await _loadConfig();
-
-  //   final connect = await SmbConnect.connectAuth(
-  //     host: _host!,
-  //     domain: _domain!,
-  //     username: _username!,
-  //     password: _password!,
-  //   );
-
-  //   final SmbFile folder = await connect.file(_filledPath!);
-  //   final SmbFile file = await connect.file('${folder.path}/$fileName');
-
-  //   IOSink writer = await connect.openWrite(file);
-  //   writer.add(utf8.encode(content));
-  //   await writer.flush();
-  //   await writer.close();
-  // }
 
   Future<void> saveFileToDirectoryWithSubfolders(
     String fileName,

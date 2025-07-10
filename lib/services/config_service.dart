@@ -26,9 +26,4 @@ class ConfigService {
       await prefs.setString(entry.key, entry.value);
     }
   }
-  
-  // static Future<bool> configExists() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('smb_host') != null;
-  // }
 }

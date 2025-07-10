@@ -255,11 +255,6 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                     " * Po wypełnieniu formularza należy zapisać go na serwerze.",
                     style: TextStyle(fontSize: 18),
                   ),
-                  // Icon(Icons.save, size: 24),
-                  // Text(
-                  //   " aby przesłać ją na serwer.",
-                  //   style: TextStyle(fontSize: 16),
-                  // ),
                 ],
               ),
               Text(
@@ -405,13 +400,11 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontSize: 12,
-                        // fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ],
               ),
-              // SizedBox(height: 16),
             ],
           ),
         ),

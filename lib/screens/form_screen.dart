@@ -47,7 +47,7 @@ class _FormScreenState extends State<FormScreen> {
     try {
       final updatedFileData = widget.fileData.copyWith(checks: checks);
       final jsonString = jsonEncode(updatedFileData.toJson());
-      
+
       final smbService = SmbService();
 
       List<String> collectFilenameValues(List<CheckItem> checks) {
@@ -73,7 +73,11 @@ class _FormScreenState extends State<FormScreen> {
       final fileName =
           '${widget.fileData.form}_${checksInFilename}_$formatted.json';
 
-      await smbService.saveFileToDirectoryWithSubfolders(fileName, jsonString, widget.fileData.form);
+      await smbService.saveFileToDirectoryWithSubfolders(
+        fileName,
+        jsonString,
+        widget.fileData.form,
+      );
 
       final dir = await getApplicationDocumentsDirectory();
       final localFile = File('${dir.path}/${widget.fileData.form}_$id.json');
@@ -111,47 +115,7 @@ class _FormScreenState extends State<FormScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Listy kontrolne Lüttgens Polska'),
-          // actions: [
-          //   IconButton(
-          //     icon: Icon(Icons.save),
-          //     iconSize: 34,
-          //     tooltip: 'Zapisz',
-          //     onPressed: () async {
-          //       final confirmed = await showDialog<bool>(
-          //         context: context,
-          //         builder:
-          //             (context) => AlertDialog(
-          //               title: const Text('Potwierdzenie'),
-          //               content: const Text(
-          //                 'Czy na pewno chcesz wysłać listę na serwer?',
-          //               ),
-          //               actions: [
-          //                 TextButton(
-          //                   onPressed: () => Navigator.of(context).pop(false),
-          //                   child: const Text('Nie'),
-          //                 ),
-          //                 TextButton(
-          //                   onPressed: () => Navigator.of(context).pop(true),
-          //                   child: const Text(
-          //                     'Tak',
-          //                     style: TextStyle(
-          //                       color: Color.fromARGB(255, 0, 255, 0),
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //       );
-          //       if (confirmed == true) {
-          //         await _saveToServer();
-          //       }
-          //     },
-          //   ),
-          //   SizedBox(width: 24),
-          // ],
-        ),
+        appBar: AppBar(title: Text('Listy kontrolne Lüttgens Polska')),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -206,7 +170,9 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Text("Data utworzenia: ${widget.fileData.createdDate}"),
+                  child: Text(
+                    "Data utworzenia: ${widget.fileData.createdDate}",
+                  ),
                 ),
               ],
             ),
@@ -248,7 +214,7 @@ class _FormScreenState extends State<FormScreen> {
                           ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(true),
-      
+
                             child: const Text(
                               'Tak',
                               style: TextStyle(
@@ -270,10 +236,11 @@ class _FormScreenState extends State<FormScreen> {
               ),
               child: Text(
                 "Zapisz na serwerze",
-                style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                ),
               ),
             ),
-            // SizedBox(height: 16),
           ],
         ),
       ),
@@ -379,20 +346,18 @@ class _FormScreenState extends State<FormScreen> {
         return GroupCheck(
           label: check.text,
           children: check.children ?? [],
-          buildCheckWidget: (child, childIndex) => _buildCheckWidget(
-            child,
-            childIndex,
-            (newChild) {
-              final newChildren = List<CheckItem>.from(check.children!);
-              newChildren[childIndex] = newChild;
-              final newGroup = check.copyWith(children: newChildren);
-              if (onChanged != null) {
-                onChanged(newGroup);
-              } else {
-                _onCheckChanged(index, newGroup);
-              }
-            },
-          ),
+          buildCheckWidget:
+              (child, childIndex) =>
+                  _buildCheckWidget(child, childIndex, (newChild) {
+                    final newChildren = List<CheckItem>.from(check.children!);
+                    newChildren[childIndex] = newChild;
+                    final newGroup = check.copyWith(children: newChildren);
+                    if (onChanged != null) {
+                      onChanged(newGroup);
+                    } else {
+                      _onCheckChanged(index, newGroup);
+                    }
+                  }),
           optional: check.optional,
           used: check.used,
           onUsedChanged: (value) {

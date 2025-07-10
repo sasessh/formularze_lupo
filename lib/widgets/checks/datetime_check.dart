@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class DateTimeCheck extends StatelessWidget {
   final String label;
-  final String? value; // np. "2024-06-24T15:30:00"
+  final String? value;
   final ValueChanged<String> onChanged;
 
   const DateTimeCheck({

@@ -65,7 +65,7 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
             if (isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-      
+
             if (error != null) {
               return Center(
                 child: Column(
@@ -85,11 +85,11 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
                 ),
               );
             }
-      
+
             if (files.isEmpty) {
               return const Center(child: Text('Brak dostępnych formularzy'));
             }
-      
+
             return ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: files.length,
@@ -102,7 +102,7 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
                     final uuid = Uuid();
                     final localId = uuid.v4();
                     final fileWithId = file.copyWith(localId: localId);
-      
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(

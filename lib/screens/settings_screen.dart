@@ -9,7 +9,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // final _deviceIdController = TextEditingController();
   final _hostController = TextEditingController();
   final _domainController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -26,7 +25,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      // _deviceIdController.text = prefs.getString('device_id') ?? '';
       _hostController.text = prefs.getString('smb_host') ?? '';
       _domainController.text = prefs.getString('smb_domain') ?? '';
       _usernameController.text = prefs.getString('smb_username') ?? '';
@@ -38,7 +36,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _saveSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    // await prefs.setString('device_id', _deviceIdController.text.trim());
     await prefs.setString('smb_host', _hostController.text.trim());
     await prefs.setString('smb_domain', _domainController.text.trim());
     await prefs.setString('smb_username', _usernameController.text.trim());
