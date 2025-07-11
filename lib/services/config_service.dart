@@ -1,29 +1,46 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../models/config_model.dart';
 import '../config/app_config.dart';
 
 class ConfigService {
-  static Future<Map<String, String>> getSmbConfig() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    final hasConfig = prefs.getString('smb_host') != null;
-    
-    if (!hasConfig) {
-      await _saveDefaultConfig(prefs);
+  static Future<Map<String, String>?> getSmbConfig() async {
+    try {
+      final serverConfig = await _fetchConfigFromServer();
+      if (serverConfig != null) {
+        return serverConfig.toSmbConfig();
+      }
+    } catch (e) {
+      print('Błąd podczas pobierania konfiguracji z serwera: $e');
     }
-    
-    return {
-      'smb_host': prefs.getString('smb_host') ?? AppConfig.defaultSmbConfig['smb_host']!,
-      'smb_domain': prefs.getString('smb_domain') ?? AppConfig.defaultSmbConfig['smb_domain']!,
-      'smb_username': prefs.getString('smb_username') ?? AppConfig.defaultSmbConfig['smb_username']!,
-      'smb_password': prefs.getString('smb_password') ?? AppConfig.defaultSmbConfig['smb_password']!,
-      'smb_template_path': prefs.getString('smb_template_path') ?? AppConfig.defaultSmbConfig['smb_template_path']!,
-      'smb_filled_path': prefs.getString('smb_filled_path') ?? AppConfig.defaultSmbConfig['smb_filled_path']!,
-    };
+
+    return null;
   }
-  
-  static Future<void> _saveDefaultConfig(SharedPreferences prefs) async {
-    for (final entry in AppConfig.defaultSmbConfig.entries) {
-      await prefs.setString(entry.key, entry.value);
+
+  static Future<ConfigModel?> _fetchConfigFromServer() async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse(AppConfig.configUrl),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+
+        if (jsonData.containsKey('smb')) {
+          return ConfigModel.fromJson(jsonData['smb']);
+        } else {
+          return ConfigModel.fromJson(jsonData);
+        }
+      } else {
+        print('Błąd HTTP: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Błąd połączenia z serwerem: $e');
+      return null;
     }
   }
 }

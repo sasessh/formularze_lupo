@@ -6,7 +6,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:checklist/models/file_data.dart';
 import 'package:checklist/screens/form_screen.dart';
-import 'package:checklist/screens/settings_screen.dart';
 import 'package:checklist/screens/file_open_screen.dart';
 
 void main() {
@@ -113,64 +112,6 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
     );
   }
 
-  Future<void> _showPasswordDialog(BuildContext context) async {
-    final TextEditingController controller = TextEditingController();
-    String? errorText;
-
-    final result = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return StatefulBuilder(
-          builder:
-              (context, setState) => AlertDialog(
-                title: const Text('Podaj hasło'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: controller,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Hasło',
-                        errorText: errorText,
-                      ),
-                      autofocus: true,
-                      onSubmitted: (_) => setState(() {}),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text('Anuluj'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      const hardcodedPassword = 'ELGAbYTH';
-                      if (controller.text == hardcodedPassword) {
-                        Navigator.of(context).pop(true);
-                      } else {
-                        setState(() {
-                          errorText = 'Nieprawidłowe hasło';
-                        });
-                      }
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-        );
-      },
-    );
-    if (result == true) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SettingsScreen()),
-      );
-    }
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -203,15 +144,6 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                 context,
                 MaterialPageRoute(builder: (context) => const FileOpenScreen()),
               );
-            },
-          ),
-          SizedBox(width: 16),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            iconSize: 34,
-            tooltip: 'Ustawienia',
-            onPressed: () {
-              _showPasswordDialog(context);
             },
           ),
           SizedBox(width: 24),
@@ -263,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
               ),
               Divider(),
               Text(
-                "Wszelikie problemy z działaniem aplikacji proszę zgłaszać do:",
+                "Wszelkie problemy z działaniem aplikacji proszę zgłaszać do:",
                 style: TextStyle(fontSize: 16),
               ),
               Text(
@@ -398,9 +330,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                     child: Text(
                       appVersion,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(fontSize: 12),
                     ),
                   ),
                 ],

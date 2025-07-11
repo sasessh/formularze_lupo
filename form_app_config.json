@@ -1,0 +1,10 @@
+{
+    "smb": {
+        "host": "",
+        "domain": "",
+        "username": "",
+        "password": "",
+        "template_path": "",
+        "filled_path": ""
+    }
+}

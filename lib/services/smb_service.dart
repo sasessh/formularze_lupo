@@ -17,6 +17,11 @@ class SmbService {
 
   Future<void> _loadConfig() async {
     final config = await ConfigService.getSmbConfig();
+
+    if (config == null) {
+      throw Exception('Nie można pobrać konfiguracji z serwera');
+    }
+
     _host = config['smb_host'];
     _domain = config['smb_domain'];
     _username = config['smb_username'];

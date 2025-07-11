@@ -1,17 +1,8 @@
-// Przykładowa konfiguracja aplikacji
+// Przykładowy plik konfiguracyjny aplikacji
+// Zawiera stałe i konfiguracje używane w aplikacji
 // Zmienić nazwę pliku na app_config.dart
 
 class AppConfig {
-  // hasło do ustawień, wymagane do zmiany konfiguracji SMB
-  static const String settingsPassword = '';
-  
-  static const Map<String, String> defaultSmbConfig = {
-    // predefiniowana konfiguracja SMB
-    'smb_host': '',
-    'smb_domain': '', 
-    'smb_username': '',
-    'smb_password': '',
-    'smb_template_path': '',
-    'smb_filled_path': '',
-  };
+  // URL do pliku konfiguracyjnego JSON
+  static const String configUrl = 'http://192.168.1.123/app_config.json';
 }
