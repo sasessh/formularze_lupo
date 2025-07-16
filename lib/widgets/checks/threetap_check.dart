@@ -42,7 +42,7 @@ class ThreeTapCheck extends StatelessWidget {
                   label: Text('Nie'),
                   icon: Icon(Icons.cancel, color: Colors.red),
                 ),
-                ButtonSegment(value: 3, label: Text('Nie dotyczy')),
+                ButtonSegment(value: 3, label: Text('Nie dotyczy', style: TextStyle(fontSize: 12),)),
               ],
               selected: {selected},
               onSelectionChanged: (newSelected) {

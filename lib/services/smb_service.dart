@@ -30,7 +30,7 @@ class SmbService {
     _filledPath = config['smb_filled_path'];
   }
 
-  Future<List<FileData>> getFormsFromDirectory() async {
+  Future<List<FileData>> getEmptyFormsFromDirectory() async {
     await _loadConfig();
 
     try {
@@ -69,6 +69,119 @@ class SmbService {
     }
   }
 
+  Future<List<String>> getFormsTypes() async {
+    await _loadConfig();
+
+    try {
+      final connect = await SmbConnect.connectAuth(
+        host: _host!,
+        domain: _domain!,
+        username: _username!,
+        password: _password!,
+      );
+
+      SmbFile folder = await connect.file(_filledPath!);
+      List<SmbFile> files = await connect.listFiles(folder);
+      List<String> folderNames = [];
+
+      final now = DateTime.now();
+
+      for (var file in files) {
+        if (file.isDirectory() &&
+            (file.name == now.year.toString() ||
+                file.name == (now.year - 1).toString())) {
+          SmbFile subFolder = await connect.file(file.path);
+          List<SmbFile> subFiles = await connect.listFiles(subFolder);
+          for (var subFile in subFiles) {
+            if (subFile.isDirectory() && !folderNames.contains(subFile.name)) {
+              folderNames.add(subFile.name);
+            }
+          }
+        }
+      }
+
+      await connect.close();
+      folderNames.sort((a, b) => a.compareTo(b));
+      return folderNames;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<FileData>> getFilledForms(String formType) async {
+    await _loadConfig();
+
+    try {
+      final connect = await SmbConnect.connectAuth(
+        host: _host!,
+        domain: _domain!,
+        username: _username!,
+        password: _password!,
+      );
+
+      final now = DateTime.now();
+      final currentYear = now.year.toString();
+      final previousYear = (now.year - 1).toString();
+
+      List<FileData> forms = [];
+
+      try {
+        SmbFile folder = await connect.file(
+          '$_filledPath/$currentYear/$formType',
+        );
+        List<SmbFile> files = await connect.listFiles(folder);
+
+        for (var file in files) {
+          if (file.name.endsWith('.json')) {
+            SmbFile jsonFile = await connect.file(file.path);
+            Stream<Uint8List> reader = await connect.openRead(jsonFile);
+            List<int> fileBytes = [];
+
+            await for (var chunk in reader) {
+              fileBytes.addAll(chunk);
+            }
+
+            final jsonString = utf8.decode(fileBytes);
+            final jsonData = json.decode(jsonString) as Map<String, dynamic>;
+            forms.add(FileData.fromJson(jsonData));
+          }
+        }
+      } catch (e) {
+        // print('Error loading files for current year ($currentYear): $e');
+      }
+
+      try {
+        SmbFile folder = await connect.file(
+          '$_filledPath/$previousYear/$formType',
+        );
+        List<SmbFile> files = await connect.listFiles(folder);
+
+        for (var file in files) {
+          if (file.name.endsWith('.json')) {
+            SmbFile jsonFile = await connect.file(file.path);
+            Stream<Uint8List> reader = await connect.openRead(jsonFile);
+            List<int> fileBytes = [];
+
+            await for (var chunk in reader) {
+              fileBytes.addAll(chunk);
+            }
+
+            final jsonString = utf8.decode(fileBytes);
+            final jsonData = json.decode(jsonString) as Map<String, dynamic>;
+            forms.add(FileData.fromJson(jsonData));
+          }
+        }
+      } catch (e) {
+        // print('Error loading files from previous year ($previousYear): $e');
+      }
+
+      await connect.close();
+      return forms;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> saveFileToDirectoryWithSubfolders(
     String fileName,
     String content,
@@ -91,10 +204,8 @@ class SmbService {
     SmbFile? yearFolder;
     try {
       yearFolder = await connect.createFolder(yearFolderPath);
-      // print('Created folder for year $currentYear.');
     } catch (e) {
       yearFolder = await connect.file(yearFolderPath);
-      // print('Folder for year $currentYear already exists.');
     }
 
     final formFolderPath = '${yearFolder.path}/$formName';
@@ -102,10 +213,8 @@ class SmbService {
 
     try {
       formFolder = await connect.createFolder(formFolderPath);
-      // print('Created folder for form $formName.');
     } catch (e) {
       formFolder = await connect.file(formFolderPath);
-      // print('Folder for form $formName already exists.');
     }
 
     final SmbFile file = await connect.file('${formFolder.path}/$fileName');

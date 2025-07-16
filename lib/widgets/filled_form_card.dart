@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-class FileCard extends StatelessWidget {
-  final String form;
-  final String title;
+class FilledFormCard extends StatelessWidget {
+  final String fileSplitName;
   final VoidCallback onOpen;
 
-  const FileCard({
+  const FilledFormCard({
     super.key,
-    required this.form,
-    required this.title,
+    required this.fileSplitName,
     required this.onOpen,
   });
 
@@ -17,12 +15,10 @@ class FileCard extends StatelessWidget {
     return Card(
       elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       surfaceTintColor: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(top: 8, bottom: 16, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,19 +26,27 @@ class FileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  form,
+                  fileSplitName,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 ElevatedButton(
-                  onPressed: onOpen,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 48),
+                  ),
+                  onPressed: () {
+                    onOpen();
+                  },
                   child: const Text('Otwórz'),
                 ),
               ],
             ),
-            Text(title, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),

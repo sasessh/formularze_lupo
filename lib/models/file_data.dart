@@ -13,6 +13,8 @@ class FileData {
   final String modificationValidatedBy;
   final List<CheckItem> checks;
   final String? localId;
+  final String? serverPath;
+  final String? fileName;
 
   FileData({
     required this.form,
@@ -27,6 +29,8 @@ class FileData {
     this.modificationValidatedBy = '',
     required this.checks,
     this.localId,
+    this.serverPath,
+    this.fileName,
   });
 
   FileData copyWith({
@@ -42,6 +46,8 @@ class FileData {
     String? modificationValidatedBy,
     List<CheckItem>? checks,
     String? localId,
+    String? serverPath,
+    String? fileName,
   }) {
     return FileData(
       form: form ?? this.form,
@@ -57,6 +63,8 @@ class FileData {
           modificationValidatedBy ?? this.modificationValidatedBy,
       checks: checks ?? this.checks,
       localId: localId ?? this.localId,
+      serverPath: serverPath ?? this.serverPath,
+      fileName: fileName ?? this.fileName,
     );
   }
 
@@ -74,6 +82,7 @@ class FileData {
       'modification_validated_by': modificationValidatedBy,
       'checks': checks.map((e) => e.toJson()).toList(),
       if (localId != null) 'local_id': localId,
+      'fileName': fileName,
     };
   }
 
@@ -95,6 +104,16 @@ class FileData {
               .map((e) => CheckItem.fromJson(e as Map<String, dynamic>))
               .toList(),
       localId: json['local_id']?.toString(),
+      fileName: json['fileName']?.toString(),
     );
+  }
+
+  String getFilenameString() {
+    final filenameItems = checks.where((check) => check.inFilename).toList();
+
+    final values =
+        filenameItems.map((check) => check.value?.toString() ?? '').toList();
+
+    return values.join('   ');
   }
 }

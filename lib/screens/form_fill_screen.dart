@@ -16,16 +16,16 @@ import '../widgets/checks/label_check.dart';
 import '../widgets/checks/separator_check.dart';
 import '../widgets/checks/group_check.dart';
 
-class FormScreen extends StatefulWidget {
+class FormFillScreen extends StatefulWidget {
   final FileData fileData;
 
-  const FormScreen({super.key, required this.fileData});
+  const FormFillScreen({super.key, required this.fileData});
 
   @override
-  State<FormScreen> createState() => _FormScreenState();
+  State<FormFillScreen> createState() => _FormScreenState();
 }
 
-class _FormScreenState extends State<FormScreen> {
+class _FormScreenState extends State<FormFillScreen> {
   late List<CheckItem> checks;
 
   @override
@@ -115,7 +115,17 @@ class _FormScreenState extends State<FormScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text('Listy kontrolne Lüttgens Polska')),
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text('Formularz'),
+              Text(
+                '  ${widget.fileData.form}',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [

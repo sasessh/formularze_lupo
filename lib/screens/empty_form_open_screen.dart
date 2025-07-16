@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:checklist/screens/form_screen.dart';
-import '../widgets/file_card.dart';
+import 'package:uuid/uuid.dart';
+import 'package:checklist/screens/form_fill_screen.dart';
+import '../widgets/empty_form_card.dart';
 import '../services/smb_service.dart';
 import '../models/file_data.dart';
-import 'package:uuid/uuid.dart';
 
-class FileOpenScreen extends StatefulWidget {
-  const FileOpenScreen({super.key});
+class EmptyFormOpenScreen extends StatefulWidget {
+  const EmptyFormOpenScreen({super.key});
 
   @override
-  State<FileOpenScreen> createState() => _FileOpenScreenState();
+  State<EmptyFormOpenScreen> createState() => _FileOpenScreenState();
 }
 
-class _FileOpenScreenState extends State<FileOpenScreen> {
+class _FileOpenScreenState extends State<EmptyFormOpenScreen> {
   List<FileData> files = [];
   bool isLoading = true;
   String? error;
@@ -31,7 +31,7 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
       });
 
       final smbService = SmbService();
-      final loadedFiles = await smbService.getFormsFromDirectory();
+      final loadedFiles = await smbService.getEmptyFormsFromDirectory();
 
       setState(() {
         files = loadedFiles;
@@ -50,11 +50,12 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Wybierz listę kontrolną'),
+          title: const Text('Wybierz formularz do wypełniania'),
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
               iconSize: 34,
+              tooltip: 'Odśwież listę formularzy',
               onPressed: _loadFiles,
             ),
             SizedBox(width: 24),
@@ -95,7 +96,7 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
               itemCount: files.length,
               itemBuilder: (context, index) {
                 final file = files[index];
-                return FileCard(
+                return EmptyFormCard(
                   form: file.form,
                   title: file.title,
                   onOpen: () {
@@ -106,7 +107,7 @@ class _FileOpenScreenState extends State<FileOpenScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => FormScreen(fileData: fileWithId),
+                        builder: (context) => FormFillScreen(fileData: fileWithId),
                       ),
                     );
                   },

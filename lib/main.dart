@@ -5,8 +5,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:checklist/models/file_data.dart';
-import 'package:checklist/screens/form_screen.dart';
-import 'package:checklist/screens/file_open_screen.dart';
+import 'package:checklist/screens/form_fill_screen.dart';
+import 'package:checklist/screens/empty_form_open_screen.dart';
+import 'package:checklist/screens/filled_form_type_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -108,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
     if (!mounted) return;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FormScreen(fileData: fileData)),
+      MaterialPageRoute(builder: (context) => FormFillScreen(fileData: fileData)),
     );
   }
 
@@ -136,17 +137,35 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
         title: Text('Formularze Lüttgens Polska'),
         actions: [
           IconButton(
-            icon: Icon(Icons.folder_open),
+            icon: Icon(Icons.ballot),
             iconSize: 34,
-            tooltip: 'Otwórz',
+            color: const Color.fromARGB(255, 0, 100, 182),
+            tooltip: 'Otwórz pusty formularz',
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const FileOpenScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const EmptyFormOpenScreen(),
+                ),
               );
             },
           ),
-          SizedBox(width: 24),
+          SizedBox(width: 14),
+          IconButton(
+            icon: Icon(Icons.task_alt),
+            iconSize: 34,
+            color: const Color.fromARGB(255, 0, 141, 127),
+            tooltip: 'Otwórz wypełniony formularz',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FilledFormTypeScreen(),
+                ),
+              );
+            },
+          ),
+          SizedBox(width: 28),
         ],
       ),
       body: SafeArea(
@@ -158,62 +177,58 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
 
             children: [
               Divider(thickness: 2),
-              Text(
-                "Witaj w aplikacji do wypełniania formularzy Lüttgens Polska.",
-                style: TextStyle(fontSize: 20),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.ballot),
+                    iconSize: 40,
+                    color: const Color.fromARGB(255, 0, 100, 182),
+                    tooltip: 'Otwórz pusty formularz',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EmptyFormOpenScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  Text(
+                    "Otwórz pusty formularz, który po wypełnieniu zapiszesz na serwerze.",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.task_alt),
+                    iconSize: 40,
+                    color: const Color.fromARGB(255, 0, 141, 127),
+                    tooltip: 'Otwórz wypełniony formularz',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FilledFormTypeScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  Text(
+                    "Otwórz i przeglądaj wypełniony formularz z serwera.",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
               ),
               SizedBox(height: 16),
-              Row(
-                children: [
-                  Text(" * Użyj ikony ", style: TextStyle(fontSize: 18)),
-                  Icon(Icons.folder_open, size: 32),
-                  Text(
-                    " aby otworzyć pusty formularz z serwera.",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-              Text(
-                ' * Każda zmiana w wypełnianym formularzu jest automatycznie zapisywana lokalnie na urządzeniu.',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                " * Możesz wrócić do częściwo wypełnionego formularza otwierając go z listy poniżej.",
-                style: TextStyle(fontSize: 18),
-              ),
-              Row(
-                children: [
-                  Text(
-                    " * Po wypełnieniu formularza należy zapisać go na serwerze.",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-              Text(
-                " * Po przesłaniu na serwer, lokalna kopia zostanie usunięta.",
-                style: TextStyle(fontSize: 18),
-              ),
-              Divider(),
-              Text(
-                "Wszelkie problemy z działaniem aplikacji proszę zgłaszać do:",
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                "Przemysław Kiełkowski",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "Marcin Ostrowski",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-
               Divider(thickness: 5),
               Row(
                 children: [
                   Expanded(
                     child: const Text(
                       "Formularze lokalnie zapisane na tym urządzeniu (nie wysłane na serwer):",
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                   IconButton(
@@ -242,8 +257,25 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                   : recentFiles.isEmpty
                   ? Expanded(
                     child: const Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Text("Brak lokalnie zapisanych formularzy."),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Brak lokalnie zapisanych formularzy.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(height: 24),
+                          Text(
+                            "Pojawią się tu formularze, których wypełnianie zostało przerwane.",
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "Możesz je otworzyć i kontynuować wypełnianie. Po przesłaniu formularza na serwer, zostanie on usunięty z tej listy.",
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
                   )
                   : Expanded(
@@ -255,15 +287,37 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                         final form = recent.form;
                         final modified = recent.modified;
                         return ListTile(
-                          title: Text(form, style: TextStyle(fontSize: 18)),
-                          subtitle: Text(
-                            'Ostatnia modyfikacja: ${modified.day.toString().padLeft(2, '0')}.${modified.month.toString().padLeft(2, '0')}.${modified.year} ${modified.hour.toString().padLeft(2, '0')}:${modified.minute.toString().padLeft(2, '0')}',
-                            style: TextStyle(fontSize: 16),
+                          title: Text(
+                            form,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Text(
+                                'Ostatnia modyfikacja:  ',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                '${modified.day.toString().padLeft(2, '0')}.${modified.month.toString().padLeft(2, '0')}.${modified.year}   ${modified.hour.toString().padLeft(2, '0')}:${modified.minute.toString().padLeft(2, '0')}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
                                 child: const Text('Otwórz'),
                                 onPressed: () => _openFile(file),
                               ),

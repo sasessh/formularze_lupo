@@ -1,5 +1,5 @@
-import 'package:checklist/config/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:checklist/config/app_styles.dart';
 
 class TextCheck extends StatefulWidget {
   final String label;

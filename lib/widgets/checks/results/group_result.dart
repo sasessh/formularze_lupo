@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../models/check_item.dart';
+import 'package:checklist/models/check_item.dart';
 
-class GroupCheck extends StatelessWidget {
+class GroupResult extends StatelessWidget {
   final String label;
   final List<CheckItem> children;
-  final Widget Function(CheckItem, int) buildCheckWidget;
   final bool optional;
   final bool used;
-  final Function(bool)? onUsedChanged;
+  final Widget Function(CheckItem, int) buildResultWidget;
 
-  const GroupCheck({
+  const GroupResult({
     super.key,
     required this.label,
     required this.children,
-    required this.buildCheckWidget,
+    required this.buildResultWidget,
     this.optional = false,
     this.used = false,
-    this.onUsedChanged,
   });
-
-  static const WidgetStateProperty<Icon> thumbIcon =
-      WidgetStateProperty<Icon>.fromMap(<WidgetStatesConstraint, Icon>{
-        WidgetState.selected: Icon(Icons.check),
-        WidgetState.any: Icon(Icons.close),
-      });
 
   @override
   Widget build(BuildContext context) {
@@ -47,29 +39,36 @@ class GroupCheck extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      decoration:
+                          (optional && !used)
+                              ? TextDecoration.lineThrough
+                              : null,
+                      decorationThickness: (optional && !used) ? 2.0 : null,
+                      decorationColor:
+                          (optional && !used)
+                              ? Color.fromARGB(255, 214, 146, 0)
+                              : null,
                     ),
                   ),
-                  if (optional)
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: Switch(
-                          thumbIcon: thumbIcon,
-                          value: used,
-                          onChanged: onUsedChanged,
-                        ),
+                  if (optional && !used)
+                    Text(
+                      '   (nie dotyczy)',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
                       ),
                     ),
                 ],
               ),
             ),
+
           if (!optional || used)
             ...List.generate(
               children.length,
-              (index) => buildCheckWidget(children[index], index),
+              (index) => buildResultWidget(children[index], index),
             ),
         ],
       ),
