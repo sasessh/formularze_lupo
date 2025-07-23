@@ -135,6 +135,7 @@ class _FilledFormOpenScreenState extends State<FilledFormOpenScreen> {
         final file = filteredForms[index];
         return FilledFormCard(
           fileSplitName: file.getFilenameString(),
+          fileDate: file.fileDate ?? '',
           onOpen: () {
             Navigator.push(
               context,

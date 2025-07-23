@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:checklist/config/app_styles.dart';
 
 class TextCheck extends StatefulWidget {
   final String label;
   final String value;
+  final TextStyle style;
   final ValueChanged<String> onChanged;
 
   const TextCheck({
     super.key,
     required this.label,
     required this.value,
+    required this.style,
     required this.onChanged,
   });
 
@@ -54,7 +55,7 @@ class _TextCheckState extends State<TextCheck> {
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
       child: Row(
         children: [
-          Expanded(flex: 4, child: Text(widget.label, style: AppStyles.checkLabelStyle,)),
+          Expanded(flex: 4, child: Text(widget.label, style: widget.style)),
           const SizedBox(width: 16),
           Expanded(
             flex: 3,

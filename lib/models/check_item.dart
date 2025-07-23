@@ -7,6 +7,7 @@ class CheckItem {
   final bool inFilename;
   final bool optional;
   final bool used;
+  final bool? highlight; // zamiast hihglight
   final List<CheckItem>? children;
 
   CheckItem({
@@ -18,6 +19,7 @@ class CheckItem {
     this.inFilename = false,
     this.optional = false,
     this.used = false,
+    this.highlight = false,
     this.children,
   });
 
@@ -30,6 +32,7 @@ class CheckItem {
     bool? inFilename,
     bool? optional,
     bool? used,
+    bool? highlight,
     List<CheckItem>? children,
   }) {
     return CheckItem(
@@ -41,6 +44,7 @@ class CheckItem {
       inFilename: inFilename ?? this.inFilename,
       optional: optional ?? this.optional,
       used: used ?? this.used,
+      highlight: highlight ?? this.highlight,
       children: children ?? this.children,
     );
   }
@@ -54,6 +58,7 @@ class CheckItem {
     bool? inFilename,
     bool? optional,
     bool? used,
+    bool? highlight,
     List<CheckItem>? children,
   }) {
     return CheckItem(
@@ -65,6 +70,7 @@ class CheckItem {
       inFilename: inFilename ?? this.inFilename,
       optional: optional ?? this.optional,
       used: used ?? this.used,
+      highlight: highlight ?? this.highlight,
       children: children ?? this.children,
     );
   }
@@ -95,6 +101,7 @@ class CheckItem {
     }
 
     if (inFilename) map['in_filename'] = true;
+    if (highlight == true) map['highlight'] = true;
 
     return map;
   }
@@ -109,6 +116,7 @@ class CheckItem {
       inFilename: json['in_filename'] == true,
       optional: json['optional'] == true,
       used: json['used'] == true,
+      highlight: json['highlight'] == true,
       children:
           (json['children'] as List<dynamic>?)
               ?.map((e) => CheckItem.fromJson(e as Map<String, dynamic>))

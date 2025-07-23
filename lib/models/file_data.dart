@@ -15,6 +15,7 @@ class FileData {
   final String? localId;
   final String? serverPath;
   final String? fileName;
+  final String? fileDate;
 
   FileData({
     required this.form,
@@ -31,6 +32,7 @@ class FileData {
     this.localId,
     this.serverPath,
     this.fileName,
+    this.fileDate,
   });
 
   FileData copyWith({
@@ -48,6 +50,7 @@ class FileData {
     String? localId,
     String? serverPath,
     String? fileName,
+    String? fileDate,
   }) {
     return FileData(
       form: form ?? this.form,
@@ -65,6 +68,7 @@ class FileData {
       localId: localId ?? this.localId,
       serverPath: serverPath ?? this.serverPath,
       fileName: fileName ?? this.fileName,
+      fileDate: fileDate ?? this.fileDate,
     );
   }
 
@@ -83,6 +87,7 @@ class FileData {
       'checks': checks.map((e) => e.toJson()).toList(),
       if (localId != null) 'local_id': localId,
       'fileName': fileName,
+      'fileDate': fileDate,
     };
   }
 
@@ -105,6 +110,7 @@ class FileData {
               .toList(),
       localId: json['local_id']?.toString(),
       fileName: json['fileName']?.toString(),
+      fileDate: json['fileDate']?.toString(),
     );
   }
 

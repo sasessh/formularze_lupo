@@ -45,7 +45,7 @@ class EmptyFormCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: onOpen,
-                  child: const Text('Otwórz'),
+                  child: const Text('Wypełniaj', style: TextStyle(fontSize: 16)),
                 ),
               ],
             ),

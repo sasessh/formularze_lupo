@@ -109,7 +109,9 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
     if (!mounted) return;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FormFillScreen(fileData: fileData)),
+      MaterialPageRoute(
+        builder: (context) => FormFillScreen(fileData: fileData),
+      ),
     );
   }
 
@@ -174,16 +176,11 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
               Divider(thickness: 2),
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.ballot),
-                    iconSize: 40,
-                    color: const Color.fromARGB(255, 0, 100, 182),
-                    tooltip: 'Otwórz pusty formularz',
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -192,20 +189,39 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                         ),
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      backgroundColor: const Color.fromARGB(30, 255, 255, 255),
+                    ),
+                    child: SizedBox(
+                      width: 180,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.ballot,
+                            size: 40,
+                            color: const Color.fromARGB(255, 0, 100, 182),
+                          ),
+                          SizedBox(width: 8),
+                          Text("Wypełniaj", style: TextStyle(fontSize: 18)),
+                        ],
+                      ),
+                    ),
                   ),
                   Text(
-                    "Otwórz pusty formularz, który po wypełnieniu zapiszesz na serwerze.",
+                    "  pusty formularz, który zapiszesz na serwerze.",
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
+              SizedBox(height: 8),
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.task_alt),
-                    iconSize: 40,
-                    color: const Color.fromARGB(255, 0, 141, 127),
-                    tooltip: 'Otwórz wypełniony formularz',
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -214,9 +230,31 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                         ),
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      backgroundColor: const Color.fromARGB(30, 255, 255, 255),
+                    ),
+                    child: SizedBox(
+                      width: 180,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.task_alt,
+                            size: 40,
+                            color: const Color.fromARGB(255, 0, 141, 127),
+                          ),
+                          SizedBox(width: 8),
+                          Text("Przeglądaj", style: TextStyle(fontSize: 18)),
+                        ],
+                      ),
+                    ),
                   ),
                   Text(
-                    "Otwórz i przeglądaj wypełniony formularz z serwera.",
+                    "  wypełniony formularz z serwera.",
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
@@ -259,6 +297,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                     child: const Padding(
                       padding: EdgeInsets.all(16),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             "Brak lokalnie zapisanych formularzy.",

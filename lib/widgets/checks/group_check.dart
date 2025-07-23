@@ -5,6 +5,7 @@ class GroupCheck extends StatelessWidget {
   final String label;
   final List<CheckItem> children;
   final Widget Function(CheckItem, int) buildCheckWidget;
+  final TextStyle style;
   final bool optional;
   final bool used;
   final Function(bool)? onUsedChanged;
@@ -14,6 +15,7 @@ class GroupCheck extends StatelessWidget {
     required this.label,
     required this.children,
     required this.buildCheckWidget,
+    required this.style,
     this.optional = false,
     this.used = false,
     this.onUsedChanged,
@@ -47,10 +49,7 @@ class GroupCheck extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: style,
                   ),
                   if (optional)
                     Expanded(

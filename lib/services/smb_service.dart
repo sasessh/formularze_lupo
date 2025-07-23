@@ -42,7 +42,6 @@ class SmbService {
       );
 
       SmbFile folder = await connect.file(_templatePath!);
-
       List<SmbFile> files = await connect.listFiles(folder);
       List<FileData> forms = [];
 
@@ -63,6 +62,7 @@ class SmbService {
       }
 
       await connect.close();
+      forms.sort((a, b) => (a.form).compareTo(b.form));
       return forms;
     } catch (e) {
       rethrow;
@@ -83,7 +83,6 @@ class SmbService {
       SmbFile folder = await connect.file(_filledPath!);
       List<SmbFile> files = await connect.listFiles(folder);
       List<String> folderNames = [];
-
       final now = DateTime.now();
 
       for (var file in files) {
@@ -122,7 +121,6 @@ class SmbService {
       final now = DateTime.now();
       final currentYear = now.year.toString();
       final previousYear = (now.year - 1).toString();
-
       List<FileData> forms = [];
 
       try {
@@ -176,6 +174,7 @@ class SmbService {
       }
 
       await connect.close();
+      forms.sort((a, b) => (b.fileDate ?? '').compareTo(a.fileDate ?? ''));
       return forms;
     } catch (e) {
       rethrow;
@@ -197,7 +196,6 @@ class SmbService {
     );
 
     final SmbFile mainFolder = await connect.file(_filledPath!);
-
     final currentYear = DateTime.now().year.toString();
     final yearFolderPath = '${mainFolder.path}/$currentYear';
 

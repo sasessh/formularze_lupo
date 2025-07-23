@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:checklist/config/app_styles.dart';
 
 class TapResult extends StatelessWidget {
   final String text;
   final String value;
+  final TextStyle style;
 
-  const TapResult({super.key, required this.text, required this.value});
+  const TapResult({super.key, required this.text, required this.value, required this.style});
 
   Widget _formatTapValue(String tapValue) {
     switch (tapValue) {
@@ -58,7 +58,7 @@ class TapResult extends StatelessWidget {
         children: [
           Expanded(
             flex: 4,
-            child: Text(text, style: AppStyles.checkLabelStyle),
+            child: Text(text, style: style),
           ),
           const SizedBox(width: 16),
           Expanded(

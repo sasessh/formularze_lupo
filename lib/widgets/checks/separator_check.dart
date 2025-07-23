@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class SeparatorCheck extends StatelessWidget {
   final String title;
+  final TextStyle style;
 
-  const SeparatorCheck({super.key, required this.title});
+  const SeparatorCheck({super.key, required this.title, required this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +28,7 @@ class SeparatorCheck extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
                 title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
+                style: style,
                 overflow: TextOverflow.visible,
                 softWrap: true,
                 textAlign: TextAlign.center,

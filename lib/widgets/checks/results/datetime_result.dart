@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:checklist/config/app_styles.dart';
 
 class DatetimeResult extends StatelessWidget {
   final String text;
   final String value;
+  final TextStyle style;
 
-  const DatetimeResult({super.key, required this.text, required this.value});
+  const DatetimeResult({super.key, required this.text, required this.value, required this.style});
 
   String _formatDateTime(String isoString) {
     if (isoString.isEmpty) return '';
@@ -30,7 +30,7 @@ class DatetimeResult extends StatelessWidget {
         children: [
           Expanded(
             flex: 4,
-            child: Text(text, style: AppStyles.checkLabelStyle),
+            child: Text(text, style: style),
           ),
           const SizedBox(width: 16),
           Expanded(

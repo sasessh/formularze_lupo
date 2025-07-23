@@ -1,15 +1,16 @@
-import 'package:checklist/config/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class ThreeTapCheck extends StatelessWidget {
   final String label;
-  final String? value; // "yes", "no", "none"
+  final String? value;
+  final TextStyle style;
   final ValueChanged<String> onChanged;
 
   const ThreeTapCheck({
     super.key,
     required this.label,
     required this.value,
+    required this.style,
     required this.onChanged,
   });
 
@@ -26,7 +27,7 @@ class ThreeTapCheck extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
       child: Row(
         children: [
-          Expanded(flex: 4, child: Text(label, style: AppStyles.checkLabelStyle,)),
+          Expanded(flex: 4, child: Text(label, style: style,)),
           const SizedBox(width: 16),
           Expanded(
             flex: 3,

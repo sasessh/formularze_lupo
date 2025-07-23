@@ -1,3 +1,4 @@
+import 'package:checklist/config/app_styles.dart';
 import 'package:checklist/models/file_data.dart';
 import 'package:checklist/models/check_item.dart';
 import 'package:checklist/widgets/checks/label_check.dart';
@@ -32,7 +33,7 @@ class _FormViewScreenState extends State<FormViewScreen> {
             Row(
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     children: [
                       Text(
@@ -47,7 +48,7 @@ class _FormViewScreenState extends State<FormViewScreen> {
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 5,
                   child: Text(
                     widget.formFile.title,
                     textAlign: TextAlign.center,
@@ -120,32 +121,75 @@ class _FormViewScreenState extends State<FormViewScreen> {
       case "number":
       case "decimal":
       case 'text':
-        return TextResult(text: check.text, value: check.value ?? '');
+        return TextResult(
+          text: check.text,
+          value: check.value ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
 
       case 'list':
-        return TextResult(text: check.text, value: check.selected ?? '');
+        return TextResult(
+          text: check.text,
+          value: check.selected ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
 
       case 'datetime':
-        return DatetimeResult(text: check.text, value: check.value ?? '');
+        return DatetimeResult(
+          text: check.text,
+          value: check.value ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
 
       case '2-tap':
       case '3-tap':
-        return TapResult(text: check.text, value: check.value ?? '');
+        return TapResult(
+          text: check.text,
+          value: check.value ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
 
       case 'separator':
-        return SeparatorCheck(title: check.text);
+        return SeparatorCheck(
+          title: check.text,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
 
       case 'label':
-        return LabelCheck(label: check.text);
+        return LabelCheck(
+          label: check.text,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
 
       case 'group':
         return GroupResult(
           label: check.text,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           children: check.children ?? [],
           optional: check.optional,
           used: check.used,
-          buildResultWidget:
-              _buildResultWidget,
+          buildResultWidget: _buildResultWidget,
         );
 
       default:

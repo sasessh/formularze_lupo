@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:checklist/config/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:checklist/services/smb_service.dart';
 import 'package:path_provider/path_provider.dart';
@@ -45,9 +46,6 @@ class _FormScreenState extends State<FormFillScreen> {
 
   Future<void> _saveToServer() async {
     try {
-      final updatedFileData = widget.fileData.copyWith(checks: checks);
-      final jsonString = jsonEncode(updatedFileData.toJson());
-
       final smbService = SmbService();
 
       List<String> collectFilenameValues(List<CheckItem> checks) {
@@ -72,6 +70,14 @@ class _FormScreenState extends State<FormFillScreen> {
           '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}';
       final fileName =
           '${widget.fileData.form}_${checksInFilename}_$formatted.json';
+      final fileDate = '${now.year}.${now.month.toString().padLeft(2, '0')}.${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';;
+
+      final updatedFileData = widget.fileData.copyWith(
+        checks: checks,
+        fileName: fileName,
+        fileDate: fileDate,
+      );
+      final jsonString = jsonEncode(updatedFileData.toJson());
 
       await smbService.saveFileToDirectoryWithSubfolders(
         fileName,
@@ -132,7 +138,7 @@ class _FormScreenState extends State<FormFillScreen> {
             Row(
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     children: [
                       Text(
@@ -147,7 +153,7 @@ class _FormScreenState extends State<FormFillScreen> {
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 5,
                   child: Text(
                     widget.fileData.title,
                     textAlign: TextAlign.center,
@@ -267,6 +273,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return TextCheck(
           label: check.text,
           value: check.value ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           onChanged: (val) {
             if (onChanged != null) {
               onChanged(check.copyWith(value: val));
@@ -279,6 +289,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return NumberCheck(
           label: check.text,
           value: check.value ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           onChanged: (val) {
             if (onChanged != null) {
               onChanged(check.copyWith(value: val));
@@ -291,6 +305,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return DecimalCheck(
           label: check.text,
           value: check.value ?? '',
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           onChanged: (val) {
             if (onChanged != null) {
               onChanged(check.copyWith(value: val));
@@ -303,6 +321,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return DateTimeCheck(
           label: check.text,
           value: check.value,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           onChanged: (val) {
             if (onChanged != null) {
               onChanged(check.copyWith(value: val));
@@ -315,6 +337,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return ThreeTapCheck(
           label: check.text,
           value: check.value,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           onChanged: (val) {
             if (onChanged != null) {
               onChanged(check.copyWith(value: val));
@@ -327,6 +353,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return TwoTapCheck(
           label: check.text,
           value: check.value,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           onChanged: (val) {
             if (onChanged != null) {
               onChanged(check.copyWith(value: val));
@@ -339,6 +369,10 @@ class _FormScreenState extends State<FormFillScreen> {
         return DropdownCheck(
           label: check.text,
           options: check.options ?? [],
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           value: check.selected,
           onChanged: (val) {
             if (onChanged != null) {
@@ -349,12 +383,25 @@ class _FormScreenState extends State<FormFillScreen> {
           },
         );
       case 'label':
-        return LabelCheck(label: check.text);
+        return LabelCheck(
+          label: check.text,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
       case 'separator':
-        return SeparatorCheck(title: check.text);
+        return SeparatorCheck(
+          title: check.text,
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
+        );
       case 'group':
         return GroupCheck(
           label: check.text,
+
           children: check.children ?? [],
           buildCheckWidget:
               (child, childIndex) =>
@@ -368,6 +415,10 @@ class _FormScreenState extends State<FormFillScreen> {
                       _onCheckChanged(index, newGroup);
                     }
                   }),
+          style:
+              (check.highlight == true)
+                  ? AppStyles.checkLabelHighlight
+                  : AppStyles.checkLabelStyle,
           optional: check.optional,
           used: check.used,
           onUsedChanged: (value) {
@@ -379,20 +430,10 @@ class _FormScreenState extends State<FormFillScreen> {
           },
         );
       default:
-        if (onChanged != null) {
-          return TextCheck(
-            label: check.text,
-            value: check.value ?? '',
-            onChanged: (val) => onChanged(check.copyWith(value: val)),
-          );
-        } else {
-          return TextCheck(
-            label: check.text,
-            value: check.value ?? '',
-            onChanged:
-                (val) => _onCheckChanged(index, check.copyWith(value: val)),
-          );
-        }
+        return Text(
+          'Nieobsługiwany typ: ${check.type}',
+          style: TextStyle(color: Colors.red),
+        );
     }
   }
 }

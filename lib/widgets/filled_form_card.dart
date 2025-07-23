@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class FilledFormCard extends StatelessWidget {
   final String fileSplitName;
+  final String fileDate;
   final VoidCallback onOpen;
 
   const FilledFormCard({
     super.key,
     required this.fileSplitName,
+    required this.fileDate,
     required this.onOpen,
   });
 
@@ -18,7 +20,7 @@ class FilledFormCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       surfaceTintColor: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 16, left: 16, right: 16),
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,9 +45,20 @@ class FilledFormCard extends StatelessWidget {
                   onPressed: () {
                     onOpen();
                   },
-                  child: const Text('Otwórz'),
+                  child: const Text(
+                    'Przeglądaj',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ],
+            ),
+            // const SizedBox(height: 8),
+            Text(
+              fileDate,
+              style: TextStyle(
+                fontSize: 13,
+                color: const Color.fromARGB(255, 160, 160, 160),
+              ),
             ),
           ],
         ),

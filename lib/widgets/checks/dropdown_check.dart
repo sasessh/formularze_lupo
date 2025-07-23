@@ -1,9 +1,9 @@
-import 'package:checklist/config/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class DropdownCheck extends StatelessWidget {
   final String label;
   final List<String> options;
+  final TextStyle style;
   final String? value;
   final ValueChanged<String?> onChanged;
 
@@ -11,6 +11,7 @@ class DropdownCheck extends StatelessWidget {
     super.key,
     required this.label,
     required this.options,
+    required this.style,
     required this.value,
     required this.onChanged,
   });
@@ -23,7 +24,7 @@ class DropdownCheck extends StatelessWidget {
         children: [
           Expanded(
             flex: 4,
-            child: Text(label, style: AppStyles.checkLabelStyle),
+            child: Text(label, style: style,),
           ),
           const SizedBox(width: 16),
           Expanded(
